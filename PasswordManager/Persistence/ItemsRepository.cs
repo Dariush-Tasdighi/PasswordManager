@@ -14,6 +14,14 @@ public class ItemsRepository : object
 
 	private System.Collections.Generic.List<Domain.Item> _items;
 
+	//public System.Collections.Generic.IList<Domain.Item> Items
+	//{
+	//	get
+	//	{
+	//		return _items;
+	//	}
+	//}
+
 	public System.Collections.Generic.IReadOnlyCollection<Domain.Item> Items
 	{
 		get
@@ -60,6 +68,21 @@ public class ItemsRepository : object
 		item.UpdateEmailAddress(emailAddress: "ahmadi@c.com");
 
 		_items.Add(item: item);
+
+		var json =
+			System.Text.Json.JsonSerializer.Serialize(value:  _items);
+
+		//var items =
+		//	System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.IList<Domain.Item>(json: json);
+
+		var options =
+			new System.Text.Json.JsonSerializerOptions();
+
+		var items =
+			System.Text.Json.JsonSerializer.Deserialize
+			<System.Collections.Generic.List<Domain.Item>>(json: json, options: options);
+
+		int x = 1;
 	}
 
 	public void Add(Domain.Item item)

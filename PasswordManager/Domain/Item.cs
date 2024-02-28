@@ -13,36 +13,47 @@ public class Item : object
 		UpdateDateTime = now;
 	}
 
+	//[JsonProperty]
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.Browsable(browsable: false)]
 	public System.Guid Id { get; private set; }
 
 
 
+	[System.Text.Json.Serialization.JsonInclude]
 	public string? Url { get; private set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	public string? Username { get; private set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	public string? Password { get; private set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.DisplayName(displayName: "Email")]
 	public string? EmailAddress { get; private set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.DisplayName(displayName: "Mobile")]
 	public string? CellPhoneNumber { get; private set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.Browsable(browsable: false)]
 	public string? Description { get; private set; }
 
 
 
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.Browsable(browsable: false)]
 	public System.DateTime InsertDateTime { get; set; }
 
+	[System.Text.Json.Serialization.JsonInclude]
 	[System.ComponentModel.Browsable(browsable: false)]
 	public System.DateTime UpdateDateTime { get; set; }
 
 
 
+	[System.Text.Json.Serialization.JsonIgnore]
 	[System.ComponentModel.DisplayName(displayName: "Insert")]
 	public string DisplayInsertDateTime
 	{
@@ -56,6 +67,7 @@ public class Item : object
 		}
 	}
 
+	[System.Text.Json.Serialization.JsonIgnore]
 	[System.ComponentModel.DisplayName(displayName: "Update")]
 	public string DisplayUpdateDateTime
 	{
@@ -73,6 +85,14 @@ public class Item : object
 
 	public void UpdateUrl(string? url)
 	{
+		if(string.IsNullOrWhiteSpace(value: url))
+		{
+			var errorMessage =
+				string.Format(format: Dtat.ErrorMessages.Required, url);
+
+			throw new System.Exception(message: errorMessage);
+		}
+
 		UpdateDateTime =
 			System.DateTime.Now;
 

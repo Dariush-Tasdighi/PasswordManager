@@ -1,3 +1,4 @@
+using Persistence;
 using System.Linq;
 
 namespace PasswordManager;
@@ -13,30 +14,37 @@ public partial class MainForm
 	private void MainForm_Load
 		(object sender, System.EventArgs e)
 	{
-
 	}
 
 	private void OpenToolStripMenuItem_Click(object sender, System.EventArgs e)
 	{
 		Program.ItemsRepository.Load(pathName: "");
 
-		myDataGridView.DataSource =
-			Program.ItemsRepository.Items;
+		Search();
 	}
 
 	private void SearchTextBox_TextChanged(object sender, System.EventArgs e)
 	{
+		Search();
+	}
+
+	private void Search()
+	{
+		System.Collections.Generic.IList<Domain.Item> items;
+
 		if (string.IsNullOrWhiteSpace(value: searchTextBox.Text))
 		{
-			myDataGridView.DataSource =
-				Program.ItemsRepository.Items;
+			items =
+				Program.ItemsRepository.Items
+				.ToList()
+				;
 		}
 		else
 		{
 			var search =
 				searchTextBox.Text.Trim().ToLower();
 
-			myDataGridView.DataSource =
+			items =
 				Program.ItemsRepository.Items
 				.Where(current =>
 					(current.Url != null && current.Url.ToLower().Contains(search))
@@ -53,6 +61,17 @@ public partial class MainForm
 					)
 				.ToList()
 				;
+		}
+
+		myDataGridView.DataSource = items;
+
+		foreach (System.Windows.Forms.DataGridViewColumn column in myDataGridView.Columns)
+		{
+			column.SortMode =
+				System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+
+			column.AutoSizeMode =
+				System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 		}
 	}
 }
